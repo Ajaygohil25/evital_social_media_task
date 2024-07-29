@@ -67,7 +67,10 @@ def login():
 def update_profile():
     current_user_id = get_jwt_identity()
     data = request.get_json()
-    
+    errors = validator.validate_registration_data(data)
+    if errors:
+        return jsonify({"errors": errors}), 400
+
     userdata = user.query.filter_by(userid=current_user_id).first()
 
     if not userdata:
